@@ -78,12 +78,12 @@ export const INSTAGRAM = {
 //   1. Entra a https://formspree.io, crea un compte amb clubcanrafel@gmail.com.
 //   2. Crea un formulari nou (New form) i posa com a destinatari el correu
 //      del club. Et donarà un endpoint del tipus https://formspree.io/f/xxxxxx.
-//   3. Enganxa aquest endpoint aquí.
+//   3. Posa'l a la variable d'entorn VITE_FORMSPREE_ENDPOINT (fitxer .env).
 //
 //  Mentre estigui buit, l'enviament mostrarà un avís per escriure directament
 //  al correu del club.
 // ------------------------------------------------------------
-export const FORMSPREE_ENDPOINT = "https://formspree.io/f/mlgkzzwe";
+export const FORMSPREE_ENDPOINT = import.meta.env.VITE_FORMSPREE_ENDPOINT || "";
 
 // Franges horàries disponibles per a les reserves.
 export const FRANGES = [
@@ -103,18 +103,19 @@ export const FRANGES = [
 //   2. Genereu una clau d'API de Google (Google Cloud Console →
 //      "API i serveis" → activeu "Google Calendar API" → credencials
 //      → clau d'API; restringiu-la a la Calendar API i al vostre domini).
-//   3. Enganxeu la clau a `apiKey` i l'ID de cada calendari a `calendars`.
+//   3. Poseu la clau a la variable d'entorn VITE_GCAL_API_KEY (fitxer .env)
+//      i l'ID de cada calendari a `calendars`.
 //
-//  Mentre `apiKey` estigui buit, la disponibilitat es calcula amb les
+//  Mentre la clau estigui buida, la disponibilitat es calcula amb les
 //  reserves desades localment (mode demostració).
 //
-//  NOTA: la clau d'API d'una web és pública per definició; restringiu-la
-//  sempre per API i per domini. Crear esdeveniments (confirmar reserves)
-//  s'ha de fer des del Google Calendar per part de la junta o amb un
-//  backend, mai escrivint des del navegador.
+//  NOTA: la clau d'API d'una web és pública per definició (acaba dins del
+//  JS del navegador); la protecció real és restringir-la per API i per
+//  domini a Google Cloud. Crear esdeveniments (confirmar reserves) s'ha de
+//  fer des del Google Calendar per part de la junta, mai des del navegador.
 // ------------------------------------------------------------
 export const GOOGLE_CALENDAR = {
-  apiKey: "AIzaSyB8amAurBaxOypTlYrewpvcBjoA2Y6kw8c",
+  apiKey: import.meta.env.VITE_GCAL_API_KEY || "",
   // ID del calendari públic de cada zona (acaba sovint en @group.calendar.google.com).
   calendars: {
     barbacoa: "0b59bad2274ed3e2b38707cf126a57f31c7d05b4a3a6c959cb9f98d84b0dc7d0@group.calendar.google.com",
