@@ -1,0 +1,1066 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Guía de Estilos · Club Esportiu Can Rafel</title>
+    <style>
+      :root {
+        --pine-900: #14331f;
+        --pine-800: #1c4429;
+        --pine-700: #245634;
+        --pine-600: #2f6b3f;
+        --pine-500: #3d8754;
+        --pine-400: #6aa97f;
+        --moss: #8bbf9f;
+        --sand: #f3efe6;
+        --bark: #6b4423;
+        --cream: #faf8f3;
+        --ink: #1f2a22;
+        --muted: #5b6b5f;
+        --line: #dfe6dd;
+        --danger: #b3402f;
+        --gold: #c79a3a;
+        --shadow: 0 6px 24px rgba(20, 51, 31, 0.12);
+        --radius: 16px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      @page {
+        size: A4;
+        margin: 14mm;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        color: var(--ink);
+        background: var(--cream);
+        line-height: 1.45;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4 {
+        font-family: Georgia, "Times New Roman", serif;
+        color: var(--pine-900);
+        line-height: 1.15;
+        margin: 0 0 10px;
+      }
+
+      p {
+        margin: 0 0 10px;
+      }
+
+      .page {
+        width: 100%;
+        min-height: calc(297mm - 28mm);
+        padding: 10mm 8mm;
+        page-break-after: always;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .page:last-child {
+        page-break-after: auto;
+      }
+
+      .cover {
+        padding: 0;
+        background:
+          linear-gradient(180deg, rgba(20, 51, 31, 0.22), rgba(20, 51, 31, 0.82)),
+          url("../public/club.jpg") center/cover no-repeat;
+        color: #fff;
+      }
+
+      .cover__inner {
+        min-height: calc(297mm - 28mm);
+        padding: 20mm;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .eyebrow {
+        display: inline-block;
+        border: 1px solid rgba(255, 255, 255, 0.38);
+        border-radius: 999px;
+        padding: 6px 12px;
+        font-size: 11px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .cover h1 {
+        color: #fff;
+        font-size: 34px;
+        max-width: 560px;
+        margin-top: 18px;
+      }
+
+      .cover p {
+        max-width: 470px;
+        font-size: 15px;
+        color: rgba(255, 255, 255, 0.9);
+      }
+
+      .cover__meta {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+      }
+
+      .meta-card {
+        background: rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 16px;
+        padding: 14px 16px;
+      }
+
+      .meta-card strong {
+        display: block;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 8px;
+      }
+
+      .meta-card span {
+        font-size: 15px;
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 18px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .header__brand {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+
+      .header__brand img {
+        width: 32px;
+        height: 32px;
+      }
+
+      .header__brand strong {
+        display: block;
+        font-size: 16px;
+        color: var(--pine-900);
+      }
+
+      .header__brand span,
+      .header__page {
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .intro {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 18px;
+      }
+
+      .panel {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        box-shadow: var(--shadow);
+        padding: 18px;
+      }
+
+      .panel--sand {
+        background: var(--sand);
+      }
+
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 12px;
+      }
+
+      .chip {
+        border-radius: 999px;
+        padding: 7px 12px;
+        background: #fff;
+        border: 1px solid var(--line);
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      .mood-grid,
+      .color-grid,
+      .component-grid,
+      .image-grid {
+        display: grid;
+        gap: 14px;
+      }
+
+      .mood-grid {
+        grid-template-columns: repeat(3, 1fr);
+        margin-top: 18px;
+      }
+
+      .mood-card {
+        border-radius: 16px;
+        overflow: hidden;
+        background: #fff;
+        border: 1px solid var(--line);
+      }
+
+      .mood-card img {
+        width: 100%;
+        height: 120px;
+        object-fit: cover;
+        display: block;
+      }
+
+      .mood-card div {
+        padding: 12px 14px 14px;
+      }
+
+      .swatch {
+        border-radius: 16px;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        background: #fff;
+      }
+
+      .swatch__tone {
+        height: 84px;
+      }
+
+      .swatch__meta {
+        padding: 12px 14px 14px;
+      }
+
+      .swatch__meta strong {
+        display: block;
+        margin-bottom: 4px;
+      }
+
+      .swatch__meta code {
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .color-grid {
+        grid-template-columns: repeat(4, 1fr);
+        margin-top: 16px;
+      }
+
+      .type-specs {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+        margin-top: 16px;
+      }
+
+      .spec-sample {
+        padding: 16px;
+        border-radius: 16px;
+        border: 1px solid var(--line);
+        background: #fff;
+      }
+
+      .display {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 36px;
+        color: var(--pine-900);
+      }
+
+      .body-sample {
+        font-size: 15px;
+        color: var(--ink);
+      }
+
+      .rules {
+        margin: 12px 0 0;
+        padding-left: 18px;
+      }
+
+      .rules li {
+        margin-bottom: 7px;
+      }
+
+      .tokens {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 14px;
+        margin-top: 18px;
+      }
+
+      .token-card {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 16px;
+      }
+
+      .scale {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 10px;
+      }
+
+      .scale i {
+        display: inline-block;
+        background: var(--pine-600);
+        border-radius: 999px;
+      }
+
+      .component-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .demo {
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        overflow: hidden;
+        background: #fff;
+      }
+
+      .demo__nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 14px 16px;
+        background: rgba(250, 248, 243, 0.92);
+        border-bottom: 1px solid var(--line);
+      }
+
+      .brand-row,
+      .pill-row,
+      .alert-row,
+      .tags-row {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      .pill {
+        border-radius: 999px;
+        padding: 8px 14px;
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .pill--active {
+        background: var(--pine-600);
+        color: #fff;
+      }
+
+      .pill--ghost {
+        background: var(--sand);
+        color: var(--muted);
+      }
+
+      .demo__hero {
+        padding: 22px 18px 56px;
+        background:
+          linear-gradient(180deg, rgba(20, 51, 31, 0.55), rgba(20, 51, 31, 0.78)),
+          radial-gradient(circle at 30% 20%, var(--pine-500), var(--pine-900));
+        color: #fff;
+        position: relative;
+      }
+
+      .demo__hero h3 {
+        color: #fff;
+        font-size: 28px;
+        max-width: 320px;
+      }
+
+      .demo__hero p {
+        color: rgba(255, 255, 255, 0.92);
+        max-width: 310px;
+      }
+
+      .btn {
+        display: inline-block;
+        border-radius: 999px;
+        padding: 11px 18px;
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .btn--primary {
+        background: var(--gold);
+        color: var(--pine-900);
+      }
+
+      .btn--light {
+        background: #fff;
+        color: var(--pine-800);
+      }
+
+      .btn--outline {
+        background: transparent;
+        border: 2px solid var(--pine-600);
+        color: var(--pine-700);
+      }
+
+      .demo__body,
+      .demo__form {
+        padding: 18px;
+      }
+
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+
+      .mini-card {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        box-shadow: var(--shadow);
+        padding: 16px;
+      }
+
+      .mini-card h4 {
+        margin-bottom: 6px;
+      }
+
+      .field {
+        margin-bottom: 12px;
+      }
+
+      .field label {
+        display: block;
+        margin-bottom: 5px;
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .field-box {
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: var(--cream);
+        padding: 10px 12px;
+        font-size: 13px;
+        color: var(--muted);
+      }
+
+      .alert {
+        border-radius: 12px;
+        padding: 12px 14px;
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .alert--ok {
+        background: #e7f3ea;
+        color: var(--pine-800);
+        border: 1px solid var(--pine-400);
+      }
+
+      .alert--err {
+        background: #fbeae7;
+        color: var(--danger);
+        border: 1px solid #e3b1a8;
+      }
+
+      .alert--info {
+        background: #eef4fb;
+        color: #2a4a6b;
+        border: 1px solid #bcd2ea;
+      }
+
+      .zone-card {
+        background: #fff;
+        border: 2px solid var(--line);
+        border-radius: 14px;
+        padding: 14px;
+      }
+
+      .zone-card--active {
+        border-color: var(--pine-600);
+        background: #f3f8f4;
+      }
+
+      .badge {
+        display: inline-block;
+        border-radius: 999px;
+        padding: 4px 10px;
+        font-size: 11px;
+        font-weight: 700;
+      }
+
+      .badge--free {
+        background: #e7f3ea;
+        color: var(--pine-700);
+      }
+
+      .badge--busy {
+        background: #fbeae7;
+        color: var(--danger);
+      }
+
+      .tags-row {
+        margin-top: 8px;
+      }
+
+      .breakpoints {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 10px;
+        margin-top: 18px;
+      }
+
+      .bp {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 14px 12px;
+        text-align: center;
+      }
+
+      .bp strong {
+        display: block;
+        color: var(--pine-900);
+        margin-bottom: 4px;
+      }
+
+      .image-grid {
+        grid-template-columns: repeat(3, 1fr);
+        margin-top: 16px;
+      }
+
+      .image-grid figure {
+        margin: 0;
+        border-radius: 16px;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        background: #fff;
+      }
+
+      .image-grid img {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+        display: block;
+      }
+
+      .image-grid figcaption {
+        padding: 10px 12px 12px;
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .footer-note {
+        position: absolute;
+        left: 8mm;
+        right: 8mm;
+        bottom: 6mm;
+        display: flex;
+        justify-content: space-between;
+        color: var(--muted);
+        font-size: 11px;
+      }
+
+      .source {
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .two-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <section class="page cover">
+      <div class="cover__inner">
+        <div>
+          <span class="eyebrow">Guía de estilos</span>
+          <h1>Club Esportiu Can Rafel</h1>
+          <p>
+            Documento de referencia visual y de interfaz generado a partir del
+            frontend actual del sitio web.
+          </p>
+        </div>
+
+        <div class="cover__meta">
+          <div class="meta-card">
+            <strong>Base del sistema</strong>
+            <span>React + Vite</span>
+          </div>
+          <div class="meta-card">
+            <strong>Idioma del sitio</strong>
+            <span>Catalán</span>
+          </div>
+          <div class="meta-card">
+            <strong>Fecha</strong>
+            <span>8 julio 2026</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="page">
+      <div class="header">
+        <div class="header__brand">
+          <img src="../public/pine.svg" alt="" />
+          <div>
+            <strong>Club Esportiu Can Rafel</strong>
+            <span>Resumen de marca y dirección visual</span>
+          </div>
+        </div>
+        <div class="header__page">01</div>
+      </div>
+
+      <div class="intro">
+        <div class="panel">
+          <h2>Esencia de marca</h2>
+          <p>
+            La web proyecta un club familiar, próximo y muy ligado al entorno
+            natural. El lenguaje visual evita el tono corporativo duro y se
+            apoya en texturas suaves, verdes de pinar y titulares clásicos.
+          </p>
+          <div class="chips">
+            <span class="chip">Natural</span>
+            <span class="chip">Familiar</span>
+            <span class="chip">Tranquilo</span>
+            <span class="chip">Deportivo</span>
+            <span class="chip">Cercano</span>
+          </div>
+        </div>
+        <div class="panel panel--sand">
+          <h2>Principios visuales</h2>
+          <ul class="rules">
+            <li>Jerarquía clara con contraste alto entre fondos y texto.</li>
+            <li>Amplio uso de esquinas redondeadas y botones tipo píldora.</li>
+            <li>Bloques blancos o arena sobre fondo crema para sensación cálida.</li>
+            <li>Fotografía exterior como soporte principal del relato de marca.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="mood-grid">
+        <article class="mood-card">
+          <img src="../public/club.jpg" alt="" />
+          <div>
+            <h3>Entorno</h3>
+            <p>Paisaje de club y masa vegetal como contexto dominante.</p>
+          </div>
+        </article>
+        <article class="mood-card">
+          <img src="../public/piscina.jpg" alt="" />
+          <div>
+            <h3>Vida social</h3>
+            <p>Espacios de uso común, ocio y convivencia al aire libre.</p>
+          </div>
+        </article>
+        <article class="mood-card">
+          <img src="../public/padel.jpg" alt="" />
+          <div>
+            <h3>Actividad</h3>
+            <p>La práctica deportiva aparece integrada en un marco relajado.</p>
+          </div>
+        </article>
+      </div>
+
+      <div class="footer-note">
+        <span>Documento generado desde el código fuente actual</span>
+        <span>club-can-rafel-web</span>
+      </div>
+    </section>
+
+    <section class="page">
+      <div class="header">
+        <div class="header__brand">
+          <img src="../public/pine.svg" alt="" />
+          <div>
+            <strong>Paleta cromática</strong>
+            <span>Variables extraídas de <code>src/index.css</code></span>
+          </div>
+        </div>
+        <div class="header__page">02</div>
+      </div>
+
+      <h2>Colores principales</h2>
+      <p>
+        La paleta trabaja una familia de verdes bosque como identidad principal,
+        con crema y arena como bases de interfaz y un dorado puntual para CTA.
+      </p>
+
+      <div class="color-grid">
+        <article class="swatch">
+          <div class="swatch__tone" style="background:#14331f"></div>
+          <div class="swatch__meta">
+            <strong>Pine 900</strong>
+            <code>#14331f</code>
+            <p>Fondos oscuros, hero, footer y títulos de alto peso.</p>
+          </div>
+        </article>
+        <article class="swatch">
+          <div class="swatch__tone" style="background:#2f6b3f"></div>
+          <div class="swatch__meta">
+            <strong>Pine 600</strong>
+            <code>#2f6b3f</code>
+            <p>Estados activos, enlaces, bordes destacados y selección.</p>
+          </div>
+        </article>
+        <article class="swatch">
+          <div class="swatch__tone" style="background:#8bbf9f"></div>
+          <div class="swatch__meta">
+            <strong>Moss</strong>
+            <code>#8bbf9f</code>
+            <p>Apoyos suaves, acentos de fondo y foco visual secundario.</p>
+          </div>
+        </article>
+        <article class="swatch">
+          <div class="swatch__tone" style="background:#c79a3a"></div>
+          <div class="swatch__meta">
+            <strong>Gold</strong>
+            <code>#c79a3a</code>
+            <p>Botón principal y llamada a la acción prioritaria.</p>
+          </div>
+        </article>
+        <article class="swatch">
+          <div class="swatch__tone" style="background:#f3efe6"></div>
+          <div class="swatch__meta">
+            <strong>Sand</strong>
+            <code>#f3efe6</code>
+            <p>Fondos alternos, hover suaves y superficies informativas.</p>
+          </div>
+        </article>
+        <article class="swatch">
+          <div class="swatch__tone" style="background:#faf8f3"></div>
+          <div class="swatch__meta">
+            <strong>Cream</strong>
+            <code>#faf8f3</code>
+            <p>Fondo global del sitio y base neutra cálida.</p>
+          </div>
+        </article>
+        <article class="swatch">
+          <div class="swatch__tone" style="background:#1f2a22"></div>
+          <div class="swatch__meta">
+            <strong>Ink</strong>
+            <code>#1f2a22</code>
+            <p>Texto principal y lectura continua.</p>
+          </div>
+        </article>
+        <article class="swatch">
+          <div class="swatch__tone" style="background:#b3402f"></div>
+          <div class="swatch__meta">
+            <strong>Danger</strong>
+            <code>#b3402f</code>
+            <p>Errores, bloqueo de disponibilidad y estados críticos.</p>
+          </div>
+        </article>
+      </div>
+
+      <div class="two-col" style="margin-top:18px;">
+        <div class="panel">
+          <h3>Uso recomendado</h3>
+          <ul class="rules">
+            <li>Usar verde oscuro para transmitir estabilidad y arraigo.</li>
+            <li>Reservar el dorado para una única acción principal por bloque.</li>
+            <li>Evitar fondos puros blancos a gran escala si se quiere mantener el tono cálido.</li>
+          </ul>
+        </div>
+        <div class="panel panel--sand">
+          <h3>Contraste funcional</h3>
+          <ul class="rules">
+            <li>Texto principal sobre crema y blanco.</li>
+            <li>Texto blanco sobre hero, footer y overlays de imagen.</li>
+            <li>Verde medio como estado activo sin perder legibilidad.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-note">
+        <span>Paleta base del sistema visual</span>
+        <span>02</span>
+      </div>
+    </section>
+
+    <section class="page">
+      <div class="header">
+        <div class="header__brand">
+          <img src="../public/pine.svg" alt="" />
+          <div>
+            <strong>Tipografía y tokens</strong>
+            <span>Jerarquía textual, radio, sombras y espaciado</span>
+          </div>
+        </div>
+        <div class="header__page">03</div>
+      </div>
+
+      <h2>Sistema tipográfico</h2>
+      <div class="type-specs">
+        <div class="spec-sample">
+          <div class="display">Un club entre pins</div>
+          <p class="source">Georgia / Times New Roman serif</p>
+          <p>
+            Se usa para <code>h1</code>, <code>h2</code> y <code>h3</code>. Da
+            un tono institucional, amable y ligeramente editorial.
+          </p>
+        </div>
+        <div class="spec-sample">
+          <div class="body-sample">
+            El cuerpo usa Segoe UI con fallback a system-ui, Roboto, Helvetica
+            y Arial. La lectura es limpia, práctica y no compite con los
+            titulares.
+          </div>
+          <p class="source">Segoe UI / system-ui sans-serif</p>
+        </div>
+      </div>
+
+      <div class="panel panel--sand" style="margin-top:16px;">
+        <h3>Reglas de uso</h3>
+        <ul class="rules">
+          <li>Títulos cortos y expresivos; la serif funciona mejor con frases compactas.</li>
+          <li>Los textos de apoyo mantienen un tono cercano y descriptivo.</li>
+          <li>La web actual utiliza catalán en toda la experiencia visible.</li>
+          <li>Los botones y elementos de navegación usan peso alto para reforzar claridad.</li>
+        </ul>
+      </div>
+
+      <div class="tokens">
+        <article class="token-card">
+          <h3>Radio</h3>
+          <p><code>--radius: 16px</code></p>
+          <div class="scale"><i style="width:90px;height:38px;border-radius:16px;"></i><span>Tarjetas, formularios y contenedores.</span></div>
+        </article>
+        <article class="token-card">
+          <h3>Sombra</h3>
+          <p><code>0 6px 24px rgba(20, 51, 31, 0.12)</code></p>
+          <div class="scale"><i style="width:90px;height:38px;background:#fff;box-shadow:0 6px 24px rgba(20,51,31,0.12);border-radius:12px;border:1px solid var(--line);"></i><span>Elevación suave, nunca agresiva.</span></div>
+        </article>
+        <article class="token-card">
+          <h3>Contenedor</h3>
+          <p><code>max-width: 1080px</code></p>
+          <div class="scale"><i style="width:110px;height:10px;border-radius:6px;"></i><span>Maquetación centrada y respirada.</span></div>
+        </article>
+      </div>
+
+      <div class="tokens">
+        <article class="token-card">
+          <h3>Espaciado de sección</h3>
+          <p><code>64px</code> desktop, <code>44px</code> mobile</p>
+        </article>
+        <article class="token-card">
+          <h3>Navegación</h3>
+          <p>Header sticky de <code>66px</code> con blur y borde inferior.</p>
+        </article>
+        <article class="token-card">
+          <h3>Botones</h3>
+          <p>Píldoras de gran radio, peso 700 y elevación al hover.</p>
+        </article>
+      </div>
+
+      <div class="footer-note">
+        <span>Tokens de interfaz y lectura</span>
+        <span>03</span>
+      </div>
+    </section>
+
+    <section class="page">
+      <div class="header">
+        <div class="header__brand">
+          <img src="../public/pine.svg" alt="" />
+          <div>
+            <strong>Componentes clave</strong>
+            <span>Navegación, hero, botones, tarjetas y formularios</span>
+          </div>
+        </div>
+        <div class="header__page">04</div>
+      </div>
+
+      <div class="component-grid">
+        <article class="demo">
+          <div class="demo__nav">
+            <div class="brand-row">
+              <img src="../public/pine.svg" alt="" style="width:24px;height:24px;" />
+              <strong style="font-size:14px;">Club Esportiu Can Rafel</strong>
+            </div>
+            <div class="pill-row">
+              <span class="pill pill--ghost">Inici</span>
+              <span class="pill pill--active">Informació</span>
+              <span class="pill pill--ghost">Reserves</span>
+            </div>
+          </div>
+          <div class="demo__hero">
+            <h3>Hero principal</h3>
+            <p>
+              Fondo con doble capa, texto centrado y CTA clara en dorado.
+            </p>
+            <div class="pill-row" style="margin-top:14px;">
+              <span class="btn btn--primary">Fes-te soci</span>
+              <span class="btn btn--light">Reserva una zona</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="demo">
+          <div class="demo__body">
+            <h3 style="margin-bottom:12px;">Tarjetas de contenido</h3>
+            <div class="cards">
+              <div class="mini-card">
+                <h4>Entorn natural</h4>
+                <p>Uso de icono, título breve y texto descriptivo.</p>
+              </div>
+              <div class="mini-card">
+                <h4>Ambient familiar</h4>
+                <p>Contenedor blanco, borde fino y sombra orgánica.</p>
+              </div>
+            </div>
+            <div class="tags-row">
+              <span class="badge badge--free">Socis: gratuït</span>
+              <span class="pill pill--ghost">No socis: consulta la tarifa</span>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="component-grid" style="margin-top:14px;">
+        <article class="demo">
+          <div class="demo__form">
+            <h3 style="margin-bottom:12px;">Formularios</h3>
+            <div class="field">
+              <label>Nom i cognoms</label>
+              <div class="field-box">Texto de entrada</div>
+            </div>
+            <div class="field">
+              <label>Correu electrònic</label>
+              <div class="field-box">nom@exemple.cat</div>
+            </div>
+            <div class="alert alert--info">Selecciona una data lliure al calendari.</div>
+          </div>
+        </article>
+
+        <article class="demo">
+          <div class="demo__form">
+            <h3 style="margin-bottom:12px;">Estados y reservas</h3>
+            <div class="zone-card zone-card--active">
+              <strong>Terrassa de les moreres</strong>
+              <p style="margin:6px 0 0;">Tarjeta seleccionada en módulo de reservas.</p>
+            </div>
+            <div class="alert-row" style="margin-top:12px;">
+              <span class="badge badge--free">Disponible</span>
+              <span class="badge badge--busy">Ocupado</span>
+            </div>
+            <div class="alert alert--ok" style="margin-top:12px;">Gràcies! Hem rebut la teva sol·licitud.</div>
+            <div class="alert alert--err" style="margin-top:12px;">No s'ha pogut enviar la sol·licitud.</div>
+          </div>
+        </article>
+      </div>
+
+      <div class="panel panel--sand" style="margin-top:16px;">
+        <h3>Patrones de interacción</h3>
+        <ul class="rules">
+          <li>Hover sutil con elevación mínima o cambio de borde.</li>
+          <li>Estados activos siempre marcados con verde del sistema.</li>
+          <li>Los CTA importantes combinan forma redondeada + dorado.</li>
+          <li>Los mensajes de feedback usan color semántico y fondo suave.</li>
+        </ul>
+      </div>
+
+      <div class="footer-note">
+        <span>Biblioteca visual principal</span>
+        <span>04</span>
+      </div>
+    </section>
+
+    <section class="page">
+      <div class="header">
+        <div class="header__brand">
+          <img src="../public/pine.svg" alt="" />
+          <div>
+            <strong>Responsive, tono y fotografía</strong>
+            <span>Comportamiento y recomendaciones de continuidad</span>
+          </div>
+        </div>
+        <div class="header__page">05</div>
+      </div>
+
+      <h2>Breakpoints activos en el CSS</h2>
+      <div class="breakpoints">
+        <div class="bp">
+          <strong>900px</strong>
+          <span>Reserva a una columna</span>
+        </div>
+        <div class="bp">
+          <strong>860px</strong>
+          <span>Grids principales se apilan</span>
+        </div>
+        <div class="bp">
+          <strong>720px</strong>
+          <span>Navbar en dos filas y menos padding vertical</span>
+        </div>
+        <div class="bp">
+          <strong>680px</strong>
+          <span>Footer, forms e Instagram simplificados</span>
+        </div>
+        <div class="bp">
+          <strong>520px</strong>
+          <span>Tabs de modo en una sola columna</span>
+        </div>
+      </div>
+
+      <div class="two-col" style="margin-top:18px;">
+        <div class="panel">
+          <h3>Tono editorial</h3>
+          <ul class="rules">
+            <li>Habla en plural cercano y comunitario.</li>
+            <li>Prioriza claridad funcional antes que discurso promocional.</li>
+            <li>Refuerza la combinación deporte + naturaleza + familia.</li>
+          </ul>
+        </div>
+        <div class="panel panel--sand">
+          <h3>Recomendaciones de continuidad</h3>
+          <ul class="rules">
+            <li>Mantener fotografías luminosas y exteriores siempre que sea posible.</li>
+            <li>No introducir colores fríos o neones fuera del sistema actual.</li>
+            <li>Si se añaden nuevas secciones, seguir la lógica de bloques blancos y arena.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="image-grid">
+        <figure>
+          <img src="../public/pistas.jpg" alt="" />
+          <figcaption>Acción deportiva con entorno visible.</figcaption>
+        </figure>
+        <figure>
+          <img src="../public/piscina.jpg" alt="" />
+          <figcaption>Uso social y estacional de las instalaciones.</figcaption>
+        </figure>
+        <figure>
+          <img src="../public/club.jpg" alt="" />
+          <figcaption>Contexto natural como rasgo diferencial.</figcaption>
+        </figure>
+      </div>
+
+      <div class="panel" style="margin-top:16px;">
+        <h3>Entregables generados</h3>
+        <p>Este documento se ha preparado a partir del frontend actual del proyecto.</p>
+        <p class="source">Archivos de referencia: <code>src/index.css</code>, <code>src/components/Home.jsx</code>, <code>src/components/InfoSocis.jsx</code>, <code>src/components/Reservations.jsx</code>.</p>
+      </div>
+
+      <div class="footer-note">
+        <span>Guía lista para revisión o ampliación</span>
+        <span>05</span>
+      </div>
+    </section>
+  </body>
+</html>

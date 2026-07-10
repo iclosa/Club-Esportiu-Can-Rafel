@@ -1,6 +1,6 @@
 import { CLUB } from "../data/club.js";
 
-export default function Footer({ go }) {
+export default function Footer({ go, auth }) {
   return (
     <footer className="footer">
       <div className="container footer__grid">
@@ -24,11 +24,15 @@ export default function Footer({ go }) {
         <div>
           <h4>Enllaços</h4>
           <p>
-            <a href="#" onClick={(e) => { e.preventDefault(); go("alta"); }}>
-              Fes-te soci
-            </a>
-            <br />
-            <a href="#" onClick={(e) => { e.preventDefault(); go("reserves"); }}>
+            {!auth?.loggedIn && (
+              <>
+                <a href="#" onClick={(e) => { e.preventDefault(); go("alta"); }}>
+                  Fes-te soci
+                </a>
+                <br />
+              </>
+            )}
+            <a href="#" onClick={(e) => { e.preventDefault(); go("reserves-zones"); }}>
               Reserva una zona
             </a>
             <br />

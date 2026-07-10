@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchBlockedDates } from "../lib/reservations.js";
+import { fetchAvailability } from "../lib/reservations.js";
 
 const DOW = ["Dl", "Dt", "Dc", "Dj", "Dv", "Ds", "Dg"];
 const MESOS = [
@@ -7,93 +7,132 @@ const MESOS = [
   "juliol", "agost", "setembre", "octubre", "novembre", "desembre",
 ];
 
-function ymd(d) {
-  return d.toISOString().slice(0, 10);
+function ymd(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
 }
 
-export default function Calendar({ zonaId, selected, onSelect }) {
+export default function Calendar({
+  appointmentTypeId,
+  durationMinutes,
+  selected,
+  onSelect,
+  onAvailabilityChange,
+}) {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
+
   const [cursor, setCursor] = useState(
     new Date(today.getFullYear(), today.getMonth(), 1)
   );
-  const [blocked, setBlocked] = useState(new Set());
+  const [availability, setAvailability] = useState(new Map());
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const year = cursor.getFullYear();
   const month = cursor.getMonth();
   const firstDay = new Date(year, month, 1);
-  // Setmana comença en dilluns.
   const offset = (firstDay.getDay() + 6) % 7;
   const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-  // Carrega les dates ocupades de la zona/mes (Google Calendar o local).
   useEffect(() => {
-    let viu = true;
+    let alive = true;
     setLoading(true);
-    fetchBlockedDates(zonaId, year, month).then((set) => {
-      if (viu) {
-        setBlocked(set);
-        setLoading(false);
-      }
-    });
+    setError("");
+
+    fetchAvailability(appointmentTypeId, year, month, { durationMinutes })
+      .then((data) => {
+        if (!alive) return;
+        const next = new Map(
+          (data?.days || []).map((day) => [day.date, day.slots || []])
+        );
+        setAvailability(next);
+        onAvailabilityChange?.(next);
+      })
+      .catch((err) => {
+        if (!alive) return;
+        setAvailability(new Map());
+        onAvailabilityChange?.(new Map());
+        setError(
+          err instanceof Error
+            ? err.message
+            : "No s'ha pogut carregar la disponibilitat."
+        );
+      })
+      .finally(() => {
+        if (alive) setLoading(false);
+      });
+
     return () => {
-      viu = false;
+      alive = false;
     };
-  }, [zonaId, year, month]);
+  }, [appointmentTypeId, durationMinutes, year, month, onAvailabilityChange]);
 
   const cells = [];
   for (let i = 0; i < offset; i++) cells.push(null);
-  for (let d = 1; d <= daysInMonth; d++) cells.push(new Date(year, month, d));
-
-  const prevMonth = () => setCursor(new Date(year, month - 1, 1));
-  const nextMonth = () => setCursor(new Date(year, month + 1, 1));
+  for (let day = 1; day <= daysInMonth; day++) {
+    cells.push(new Date(year, month, day));
+  }
 
   return (
     <div className="cal">
       <div className="cal__head">
-        <button type="button" onClick={prevMonth} aria-label="Mes anterior">
+        <button type="button" onClick={() => setCursor(new Date(year, month - 1, 1))}>
           ‹
         </button>
         <strong>
           {MESOS[month]} {year}
         </strong>
-        <button type="button" onClick={nextMonth} aria-label="Mes següent">
+        <button type="button" onClick={() => setCursor(new Date(year, month + 1, 1))}>
           ›
         </button>
       </div>
+
       <div className="cal__grid">
-        {DOW.map((d) => (
-          <div className="cal__dow" key={d}>
-            {d}
+        {DOW.map((day) => (
+          <div className="cal__dow" key={day}>
+            {day}
           </div>
         ))}
+
         {cells.map((date, i) => {
-          if (!date) return <div className="cal__day empty" key={"e" + i} />;
+          if (!date) return <div className="cal__day empty" key={`e-${i}`} />;
+
           const key = ymd(date);
           const past = date < today;
-          const ocupat = !past && blocked.has(key);
+          const slots = availability.get(key) || [];
+          const available = !past && slots.length > 0;
           const isSel = selected === key;
+
           return (
             <button
               type="button"
               key={key}
-              disabled={past || ocupat}
+              disabled={!available}
               onClick={() => onSelect(key)}
-              className={`cal__day ${ocupat ? "full" : ""} ${isSel ? "selected" : ""}`}
-              title={ocupat ? "Ocupat" : ""}
+              className={`cal__day ${available ? "" : "full"} ${isSel ? "selected" : ""}`}
+              title={available ? `${slots.length} franges disponibles` : "No disponible"}
             >
               {date.getDate()}
-              {ocupat && <span className="dot" />}
+              {available && <span className="dot" />}
             </button>
           );
         })}
       </div>
+
       <div className="cal__legend">
-        <span><i style={{ background: "var(--sand)" }} /> Lliure</span>
-        <span><i style={{ background: "var(--danger)" }} /> Ocupat</span>
+        <span><i style={{ background: "var(--sand)" }} /> Sense franges</span>
+        <span><i style={{ background: "var(--danger)" }} /> Disponible</span>
         {loading && <span style={{ marginLeft: "auto" }}>Carregant…</span>}
       </div>
+
+      {error && (
+        <p className="hint" style={{ color: "var(--danger)", marginTop: 12 }}>
+          {error}
+        </p>
+      )}
     </div>
   );
 }

@@ -1,4 +1,4 @@
-export default function InfoSocis({ go }) {
+export default function InfoSocis({ go, auth }) {
   return (
     <>
       <section className="hero" style={{ padding: "84px 20px 100px" }}>
@@ -9,11 +9,13 @@ export default function InfoSocis({ go }) {
             Un club petit i familiar envoltat de pins. Aquí tens tot el que has
             de saber: quotes, instal·lacions i com donar-te d'alta.
           </p>
-          <div className="hero__cta">
-            <button className="btn btn--primary" onClick={() => go("alta")}>
-              Omplir el formulari d'alta
-            </button>
-          </div>
+          {!auth?.loggedIn && (
+            <div className="hero__cta">
+              <button className="btn btn--primary" onClick={() => go("alta")}>
+                Omplir el formulari d'alta
+              </button>
+            </div>
+          )}
         </div>
       </section>
 
@@ -23,8 +25,7 @@ export default function InfoSocis({ go }) {
           <h2 className="section__title">Quotes mensuals</h2>
           <p className="section__lead">
             L'ús de les instal·lacions no té cap tarifa addicional més enllà de
-            la quota. Només paguen alguns serveis els acompanyants <strong>no
-            socis</strong> (piscina o pàdel).
+            la quota.
           </p>
           <div className="grid grid--3">
             <div className="card">
@@ -72,9 +73,9 @@ export default function InfoSocis({ go }) {
               <div className="card__icon">🎾</div>
               <h3>Pàdel / Frontó</h3>
               <p>
-                La reserva de les pistes es fa a través de l'app <strong>MP Centros</strong>
-                {" "}i és gratuïta per a socis i beneficiaris. El pagament dels
-                convidats no socis també es gestiona des de la mateixa app.
+                Les reserves es fan des de l&apos;APP del Club,
+                <strong> Club Esportiu Can Rafel</strong>, disponible en
+                Android i iPhone o des de la web.
               </p>
             </div>
           </div>
@@ -87,9 +88,8 @@ export default function InfoSocis({ go }) {
           <h2 className="section__title">Altres instal·lacions i activitats</h2>
           <p className="section__lead">
             Els socis poden fer ús de la resta d'instal·lacions i reservar la
-            pista multiesportiva, la zona de BBQ, la terrassa de les moreres i la
-            sala polivalent per a celebracions. El pàdel i el frontó es reserven
-            des de l'app MP Centros.
+            pista multiesportiva, la zona de BBQ, la terrassa de les moreres i
+            la sala polivalent per a celebracions.
           </p>
           <div className="grid grid--2">
             <div className="card">
@@ -135,21 +135,23 @@ export default function InfoSocis({ go }) {
       </section>
 
       {/* Documentació + CTA */}
-      <section className="section section--alt">
-        <div className="container">
-          <div className="form" style={{ textAlign: "center" }}>
-            <h2 style={{ marginTop: 0 }}>Com donar-te d'alta</h2>
-            <p>
-              Omple el formulari d'alta en línia. Per completar el procés només
-              caldrà que ens enviïs una <strong>fotocòpia del DNI del titular</strong>
-              {" "}i una <strong>foto de cada beneficiari</strong>.
-            </p>
-            <button className="btn btn--primary" onClick={() => go("alta")}>
-              Anar al formulari d'alta →
-            </button>
+      {!auth?.loggedIn && (
+        <section className="section section--alt">
+          <div className="container">
+            <div className="form" style={{ textAlign: "center" }}>
+              <h2 style={{ marginTop: 0 }}>Com donar-te d'alta</h2>
+              <p>
+                Omple el formulari d'alta en línia. Per completar el procés només
+                caldrà que ens enviïs una <strong>fotocòpia del DNI del titular</strong>
+                {" "}i una <strong>foto de cada beneficiari</strong>.
+              </p>
+              <button className="btn btn--primary" onClick={() => go("alta")}>
+                Anar al formulari d'alta →
+              </button>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
     </>
   );
 }

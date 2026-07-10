@@ -10,9 +10,9 @@ export default function PadelFronto() {
       <div className="mp-card__body">
         <h3 style={{ margin: "0 0 6px" }}>{zona.nom}</h3>
         <p style={{ margin: 0, color: "var(--muted)" }}>
-          La reserva de pàdel i frontó es fa des de l'app{" "}
-          <strong>{MP_CENTROS.nom}</strong>, no des d'aquest web. El pagament dels
-          convidats no socis també es gestiona des de la mateixa app.
+          Les reserves es fan des de l&apos;APP del Club,
+          <strong> Club Esportiu Can Rafel</strong>, disponible en Android i
+          iPhone o des de la web.
         </p>
       </div>
       <div className="mp-card__actions">

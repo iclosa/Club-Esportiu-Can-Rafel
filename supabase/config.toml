@@ -1,0 +1,25 @@
+project_id = "kmbcptnavfwirvvqfbdc"
+
+[functions.availability]
+verify_jwt = false
+
+[functions.reservations]
+verify_jwt = false
+
+[functions.membership-signup]
+verify_jwt = false
+
+[functions.odoo-login]
+verify_jwt = false
+
+[functions.club-members]
+verify_jwt = false
+
+[functions.create-checkout-session]
+verify_jwt = false
+
+[functions.payment-status]
+verify_jwt = false
+
+[functions.stripe-webhook]
+verify_jwt = false

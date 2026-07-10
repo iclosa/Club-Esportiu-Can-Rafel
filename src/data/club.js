@@ -1,7 +1,5 @@
 // ============================================================
 //  Configuració del club — única font de dades del frontend.
-//  Quan tingueu backend o Google Sheet, només cal substituir
-//  aquest fitxer i la capa de src/lib/reservations.js.
 // ============================================================
 
 export const CLUB = {
@@ -13,12 +11,6 @@ export const CLUB = {
   web: "www.clubesportiucanrafel.cat",
 };
 
-// ------------------------------------------------------------
-//  SLIDER destacat de la pàgina d'inici.
-//  PLACEHOLDERS: deixeu el camp `img` buit ("") i es mostrarà un
-//  marcador visual. Quan tingueu les fotos, copieu-les a
-//  /public/imatges/ i poseu la ruta, p. ex. img: "/imatges/piscina.jpg".
-// ------------------------------------------------------------
 export const SLIDES = [
   {
     img: "/padel.jpg",
@@ -42,25 +34,10 @@ export const SLIDES = [
   },
 ];
 
-// ------------------------------------------------------------
-//  INSTAGRAM — últimes publicacions.
-//  PLACEHOLDER: poseu l'usuari i l'URL reals del club. Mentre no
-//  connecteu el feed automàtic, es mostren targetes de marcador
-//  que enllacen al perfil. Per mostrar les publicacions reals
-//  automàticament podeu fer servir un widget (LightWidget, Behold,
-//  EmbedSocial...) o la Instagram Basic Display API i substituir
-//  el contingut del component InstagramFeed.
-// ------------------------------------------------------------
 export const INSTAGRAM = {
   handle: "@clubcanrafel",
   url: "https://www.instagram.com/clubesportiucanrafel/",
-  // FEED REAL AUTOMÀTIC (recomanat):
-  //  1. Entra a https://lightwidget.com, inicia sessió amb l'Instagram del
-  //     club i crea un widget amb les últimes publicacions.
-  //  2. Copia l'URL de l'iframe que et donen (acaba en .html) i enganxa-la
-  //     aquí. Mentre estigui buit, es mostren els marcadors de sota.
   embedUrl: "",
-  // Marcadors de posició (mentre no hi hagi `embedUrl`).
   posts: [
     { img: "", caption: "Última publicació" },
     { img: "", caption: "Publicació recent" },
@@ -69,70 +46,22 @@ export const INSTAGRAM = {
   ],
 };
 
-// ------------------------------------------------------------
-//  ENVIAMENT DE FORMULARIS PER CORREU (sense backend) — Formspree.
-//  El formulari de reserva (i el d'alta) s'envien al correu del club
-//  a través de Formspree, que reenvia les dades a clubcanrafel@gmail.com.
-//
-//  COM ACTIVAR-HO:
-//   1. Entra a https://formspree.io, crea un compte amb clubcanrafel@gmail.com.
-//   2. Crea un formulari nou (New form) i posa com a destinatari el correu
-//      del club. Et donarà un endpoint del tipus https://formspree.io/f/xxxxxx.
-//   3. Posa'l a la variable d'entorn VITE_FORMSPREE_ENDPOINT (fitxer .env).
-//
-//  Mentre estigui buit, l'enviament mostrarà un avís per escriure directament
-//  al correu del club.
-// ------------------------------------------------------------
 export const FORMSPREE_ENDPOINT = import.meta.env.VITE_FORMSPREE_ENDPOINT || "";
 
-// Franges horàries disponibles per a les reserves.
+export const RESERVATIONS_API = {
+  baseUrl: import.meta.env.VITE_RESERVATIONS_API_URL || "",
+};
+
 export const FRANGES = [
   { id: "mati", label: "Matí", hores: "10:00 – 14:00" },
   { id: "tarda", label: "Tarda", hores: "16:00 – 20:00" },
   { id: "vespre", label: "Vespre", hores: "20:00 – 00:00" },
 ];
 
-// ------------------------------------------------------------
-//  GOOGLE CALENDAR — disponibilitat de dates de les reserves.
-//  El calendari de reserves mostra com a OCUPADES les dates que
-//  tinguin esdeveniments al Google Calendar de cada zona.
-//
-//  COM ACTIVAR-HO:
-//   1. Creeu un calendari de Google per a cada zona (o un de sol) i
-//      feu-lo PÚBLIC (Configuració → "Fes-lo públic").
-//   2. Genereu una clau d'API de Google (Google Cloud Console →
-//      "API i serveis" → activeu "Google Calendar API" → credencials
-//      → clau d'API; restringiu-la a la Calendar API i al vostre domini).
-//   3. Poseu la clau a la variable d'entorn VITE_GCAL_API_KEY (fitxer .env)
-//      i l'ID de cada calendari a `calendars`.
-//
-//  Mentre la clau estigui buida, la disponibilitat es calcula amb les
-//  reserves desades localment (mode demostració).
-//
-//  NOTA: la clau d'API d'una web és pública per definició (acaba dins del
-//  JS del navegador); la protecció real és restringir-la per API i per
-//  domini a Google Cloud. Crear esdeveniments (confirmar reserves) s'ha de
-//  fer des del Google Calendar per part de la junta, mai des del navegador.
-// ------------------------------------------------------------
-export const GOOGLE_CALENDAR = {
-  apiKey: import.meta.env.VITE_GCAL_API_KEY || "",
-  // ID del calendari públic de cada zona (acaba sovint en @group.calendar.google.com).
-  calendars: {
-    barbacoa: "0b59bad2274ed3e2b38707cf126a57f31c7d05b4a3a6c959cb9f98d84b0dc7d0@group.calendar.google.com",
-    piscina: "3a3fb1fdbfb62ac28b766de06c24deb4522897ed35d22cb135f4cb440145ebcd@group.calendar.google.com",
-    poliesportiva: "2a4c1997e87d685e19c4c2e5f54d0a4dcbf4bc368e232cf741593d533a26bb63@group.calendar.google.com",
-    sala: "1da2e4a06444f83d2a4bdbca717d75661c7f93e6dea6a5be65bc50788e0b874a@group.calendar.google.com",
-  },
-};
-
-// ------------------------------------------------------------
-//  Zones RESERVABLES des del web (calendari + sol·licitud).
-//  Obertes a socis i no socis: gratuïtes per a socis, amb tarifa
-//  per a no socis. Els socis tenen prioritat.
-// ------------------------------------------------------------
 export const ZONES = [
   {
     id: "barbacoa",
+    appointmentTypeId: 9,
     nom: "Zona de barbacoa",
     emoji: "🔥",
     descripcio:
@@ -151,6 +80,7 @@ export const ZONES = [
   },
   {
     id: "piscina",
+    appointmentTypeId: 10,
     nom: "Terrassa de les moreres",
     emoji: "🏊",
     descripcio:
@@ -167,6 +97,7 @@ export const ZONES = [
   },
   {
     id: "poliesportiva",
+    appointmentTypeId: 11,
     nom: "Pista multiesportiva",
     emoji: "⛹️",
     descripcio:
@@ -183,6 +114,7 @@ export const ZONES = [
   },
   {
     id: "sala",
+    appointmentTypeId: 12,
     nom: "Sala polivalent",
     emoji: "🏠",
     descripcio:
@@ -198,15 +130,9 @@ export const ZONES = [
   },
 ];
 
-// ------------------------------------------------------------
-//  Reserva de PÀDEL i FRONTÓ — es gestiona des de l'app MP Centros,
-//  NO des d'aquest web.
-//  PLACEHOLDER: poseu l'enllaç real de l'app/centre a `url`.
-//  Si el deixeu buit (""), només es mostra el text informatiu.
-// ------------------------------------------------------------
 export const MP_CENTROS = {
   nom: "MP Centros",
-  url: "", // p. ex. enllaç al centre dins l'app o a la fitxa de Google Play / App Store
+  url: "",
   androidUrl: "https://play.google.com/store/search?q=MP%20Centros&c=apps",
   iosUrl: "https://apps.apple.com/search?term=MP%20Centros",
   zones: [
@@ -220,8 +146,45 @@ export const MP_CENTROS = {
   ],
 };
 
-// Llistat de socis (simulació). En producció vindria del padró de socis.
-// La reserva de soci es valida si el DNI o el núm. de soci hi consten.
+export const COURTS = [
+  {
+    id: "padel",
+    appointmentTypeId: 7,
+    nom: "Pista de pàdel",
+    emoji: "🎾",
+    descripcio:
+      "Reserva una pista de pàdel amb disponibilitat real segons Odoo.",
+    capacitat: "Singles o dobles",
+    durades: [{ value: 60, label: "60 min" }],
+    tipus: [
+      { value: "dobles", label: "Dobles" },
+      { value: "singles", label: "Singles" },
+    ],
+    jugadorsPerTipus: {
+      dobles: 4,
+      singles: 2,
+    },
+  },
+  {
+    id: "fronto",
+    appointmentTypeId: 8,
+    nom: "Pista de frontó",
+    emoji: "🥎",
+    descripcio:
+      "Reserva la pista de frontó amb les hores disponibles configurades a Odoo.",
+    capacitat: "Singles o dobles",
+    durades: [{ value: 60, label: "60 min" }],
+    tipus: [
+      { value: "dobles", label: "Dobles" },
+      { value: "singles", label: "Singles" },
+    ],
+    jugadorsPerTipus: {
+      dobles: 4,
+      singles: 2,
+    },
+  },
+];
+
 export const SOCIS = [
   { numSoci: "001", dni: "12345678A", nom: "Família Garcia" },
   { numSoci: "014", dni: "47852136B", nom: "Família Martí" },

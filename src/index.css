@@ -93,6 +93,7 @@ a {
 .nav__links {
   display: flex;
   gap: 6px;
+  align-items: center;
 }
 
 .nav__links button {
@@ -114,6 +115,35 @@ a {
 .nav__links button.active {
   color: #fff;
   background: var(--pine-600);
+}
+
+.nav__submenu {
+  position: relative;
+}
+
+.nav__submenu-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 220px;
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+}
+
+.nav__submenu:hover .nav__submenu-menu,
+.nav__submenu:focus-within .nav__submenu-menu {
+  display: flex;
+}
+
+.nav__submenu-menu button {
+  width: 100%;
+  text-align: left;
 }
 
 /* ---------- Hero ---------- */
@@ -325,6 +355,83 @@ a {
   border-color: var(--pine-400);
 }
 
+.member-picker {
+  position: relative;
+}
+
+.member-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #fff;
+}
+
+.member-card__avatar {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--sand);
+  color: var(--pine-700);
+  font-weight: 800;
+  font-size: 1.1rem;
+}
+
+.member-card__body {
+  flex: 1;
+}
+
+.member-card__body strong,
+.member-card__body small {
+  display: block;
+}
+
+.member-card__body small {
+  color: var(--muted);
+}
+
+.member-picker__menu {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  display: grid;
+  gap: 4px;
+  padding: 8px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+}
+
+.member-picker__item {
+  padding: 10px 12px;
+  border-radius: 10px;
+  color: var(--muted);
+  background: var(--cream);
+}
+
+.member-picker__item--button {
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+}
+
+.member-picker__item--button:hover {
+  background: var(--sand);
+}
+
+.member-picker__item strong,
+.member-picker__item small {
+  display: block;
+}
+
 .row {
   display: grid;
   gap: 16px;
@@ -451,6 +558,116 @@ a {
   .reserve-layout {
     grid-template-columns: 1fr;
   }
+}
+
+.confirmation {
+  max-width: 880px;
+  margin: 0 auto;
+}
+
+.confirmation__hero {
+  text-align: center;
+  padding: 34px 28px;
+  margin-bottom: 24px;
+  border-radius: 24px;
+  color: #fff;
+  background:
+    linear-gradient(135deg, rgba(199, 154, 58, 0.95), rgba(61, 135, 84, 0.92)),
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.2), transparent 35%);
+  box-shadow: var(--shadow);
+}
+
+.confirmation__hero h1 {
+  margin: 10px 0 8px;
+  color: #fff;
+  font-size: clamp(2rem, 4.5vw, 3rem);
+}
+
+.confirmation__hero p {
+  margin: 0 auto;
+  max-width: 620px;
+  font-size: 1.05rem;
+}
+
+.confirmation__hero-meta {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 16px;
+  padding: 12px 16px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+}
+
+.confirmation__hero-meta strong {
+  font-size: 1.05rem;
+}
+
+.confirmation__hero-meta span {
+  font-size: 0.98rem;
+}
+
+.confirmation__hero--error {
+  background:
+    linear-gradient(135deg, rgba(179, 64, 47, 0.96), rgba(107, 68, 35, 0.92)),
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.16), transparent 35%);
+}
+
+.confirmation__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.confirmation__card h3 {
+  margin-top: 0;
+  margin-bottom: 18px;
+}
+
+.confirmation__list {
+  display: grid;
+  gap: 16px;
+}
+
+.confirmation__list span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.confirmation__list strong {
+  display: block;
+  margin-top: 3px;
+  font-size: 1.02rem;
+  color: var(--pine-900);
+}
+
+.confirmation__players {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.confirmation__player {
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: var(--sand);
+  border: 1px solid var(--line);
+  font-weight: 600;
+}
+
+.confirmation__actions {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 26px;
 }
 
 /* Calendar */

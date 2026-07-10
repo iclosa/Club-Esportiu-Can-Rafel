@@ -3,7 +3,7 @@ import Slider from "./Slider.jsx";
 import InstagramFeed from "./InstagramFeed.jsx";
 import PadelFronto from "./PadelFronto.jsx";
 
-export default function Home({ go }) {
+export default function Home({ go, auth }) {
   return (
     <>
       <section className="hero">
@@ -15,10 +15,12 @@ export default function Home({ go }) {
             tranquil.
           </p>
           <div className="hero__cta">
-            <button className="btn btn--primary" onClick={() => go("alta")}>
-              Fes-te soci
-            </button>
-            <button className="btn btn--light" onClick={() => go("reserves")}>
+            {!auth?.loggedIn && (
+              <button className="btn btn--primary" onClick={() => go("alta")}>
+                Fes-te soci
+              </button>
+            )}
+            <button className="btn btn--light" onClick={() => go("reserves-zones")}>
               Reserva una zona
             </button>
           </div>
@@ -73,9 +75,9 @@ export default function Home({ go }) {
         <div className="container">
           <h2 className="section__title">Les nostres zones</h2>
           <p className="section__lead">
-            Socis i no socis poden reservar les zones del club. Els socis ho fan
-            de manera <strong>gratuïta i amb prioritat</strong>; els no socis
-            tenen una tarifa.
+            Les reserves de les zones del club es fan des d&apos;aquest web amb
+            accés de soci. Els socis reserven de manera
+            <strong> gratuïta i amb prioritat</strong>.
           </p>
           <div className="grid grid--2">
             {ZONES.map((z) => (
@@ -90,9 +92,6 @@ export default function Home({ go }) {
                   <span className="price-tag price-tag--soci">
                     Socis: {z.preuSoci}
                   </span>
-                  <span className="price-tag price-tag--nosoci">
-                    No socis: {z.preuNoSoci}
-                  </span>
                 </div>
               </div>
             ))}
@@ -102,7 +101,7 @@ export default function Home({ go }) {
           <PadelFronto />
 
           <div style={{ textAlign: "center", marginTop: 30 }}>
-            <button className="btn btn--primary" onClick={() => go("reserves")}>
+            <button className="btn btn--primary" onClick={() => go("reserves-zones")}>
               Anar a reserves →
             </button>
           </div>
@@ -112,23 +111,25 @@ export default function Home({ go }) {
       {/* Últimes publicacions d'Instagram */}
       <InstagramFeed />
 
-      <section className="section">
-        <div className="container" style={{ textAlign: "center" }}>
-          <h2 className="section__title">Vols formar part del club?</h2>
-          <p className="section__lead">
-            Fer-se soci és fàcil. Consulta les quotes i els avantatges, i omple
-            el full d'inscripció en línia.
-          </p>
-          <div className="hero__cta" style={{ justifyContent: "center" }}>
-            <button className="btn btn--outline" onClick={() => go("info")}>
-              Quotes i beneficis
-            </button>
-            <button className="btn btn--primary" onClick={() => go("alta")}>
-              Començar la inscripció
-            </button>
+      {!auth?.loggedIn && (
+        <section className="section">
+          <div className="container" style={{ textAlign: "center" }}>
+            <h2 className="section__title">Vols formar part del club?</h2>
+            <p className="section__lead">
+              Fer-se soci és fàcil. Consulta les quotes i els avantatges, i omple
+              el full d'inscripció en línia.
+            </p>
+            <div className="hero__cta" style={{ justifyContent: "center" }}>
+              <button className="btn btn--outline" onClick={() => go("info")}>
+                Quotes i beneficis
+              </button>
+              <button className="btn btn--primary" onClick={() => go("alta")}>
+                Començar la inscripció
+              </button>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
     </>
   );
 }
