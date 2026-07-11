@@ -117,13 +117,22 @@ a {
   background: var(--pine-600);
 }
 
+.nav__links button.nav__logout {
+  color: var(--danger);
+}
+
+.nav__links button.nav__logout:hover {
+  color: #fff;
+  background: var(--danger);
+}
+
 .nav__submenu {
   position: relative;
 }
 
 .nav__submenu-menu {
   position: absolute;
-  top: calc(100% + 8px);
+  top: calc(100% + 4px);
   right: 0;
   min-width: 220px;
   display: none;
@@ -136,6 +145,7 @@ a {
   box-shadow: var(--shadow);
 }
 
+.nav__submenu.open .nav__submenu-menu,
 .nav__submenu:hover .nav__submenu-menu,
 .nav__submenu:focus-within .nav__submenu-menu {
   display: flex;
@@ -257,6 +267,12 @@ a {
   color: var(--muted);
   max-width: 620px;
   margin: 0 auto 44px;
+}
+
+.home-zone-contact {
+  margin: 20px 0 0;
+  color: var(--muted);
+  font-size: 0.95rem;
 }
 
 .grid {
@@ -1095,7 +1111,7 @@ a {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin: 12px 0 0;
+  margin: 12px 0 14px;
 }
 
 .price-tag {

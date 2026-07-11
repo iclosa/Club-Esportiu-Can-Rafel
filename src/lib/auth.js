@@ -54,10 +54,18 @@ export async function loginWithOdoo({ login, password }) {
     data?.user?.email ||
     data?.partner?.email ||
     identifier;
+  const accessToken = String(
+    data?.accessToken || data?.access_token || data?.token || ""
+  ).trim();
+
+  if (!accessToken) {
+    throw new Error("No s'ha rebut cap token d'accés.");
+  }
 
   return {
     loggedIn: true,
     login: identifier,
+    accessToken,
     userId: Number(data?.userId || data?.uid || 0) || null,
     partnerId: Number(data?.partnerId || 0) || null,
     name: normalizePersonName(resolvedName),

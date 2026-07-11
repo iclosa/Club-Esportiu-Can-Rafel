@@ -172,6 +172,11 @@ function formatPrice(amountEuros) {
   }).format(amountEuros);
 }
 
+function getMemberSummary(member) {
+  const tags = Array.isArray(member?.tags) ? member.tags.filter(Boolean) : [];
+  return tags.join(", ") || "Soci del club";
+}
+
 function LoginBox({ onLogin }) {
   const [login, setLogin] = useState(IS_TEST_MODE ? TEST_EMAIL : "");
   const [password, setPassword] = useState("");
@@ -289,12 +294,12 @@ function MemberCombobox({ index, value, onSelect, auth, selectedIds }) {
     <div className="member-picker">
       <div className="member-card">
         <div className="member-card__avatar">
-          {value?.name ? value.name.charAt(0).toUpperCase() : "+"}
+          {value?.name ? value.name.charAt(0).toUpperCase() : "?"}
         </div>
         <div className="member-card__body">
           <strong>{value?.name || "Afegir jugador"}</strong>
           <small>
-            {value?.id ? value.tags?.join(", ") || "Soci del club" : "Toca + per afegir"}
+            {value?.id ? getMemberSummary(value) : "Convidat no soci · 7 €"}
           </small>
         </div>
         <button
@@ -303,7 +308,7 @@ function MemberCombobox({ index, value, onSelect, auth, selectedIds }) {
           style={{ padding: "8px 14px" }}
           onClick={() => setOpen((current) => !current)}
         >
-          {value?.id ? "Canviar" : "+"}
+          {value?.id ? "Canviar" : "Afegir"}
         </button>
       </div>
       {open && (
@@ -343,7 +348,7 @@ function MemberCombobox({ index, value, onSelect, auth, selectedIds }) {
               >
                 <strong>{member.name}</strong>
                 <small>
-                  {member.tags.join(", ")}
+                  {getMemberSummary(member)}
                   {member.email ? ` · ${member.email}` : ""}
                 </small>
               </button>
@@ -410,8 +415,6 @@ function ZoneReservations({ auth }) {
         appointmentTypeId: zona.appointmentTypeId,
         zonaId: zona.id,
         zonaNom: zona.nom,
-        authUserId: auth?.userId || null,
-        authPartnerId: auth?.partnerId || null,
         nom: form.nom,
         email: form.email,
         telefon: form.telefon || null,
@@ -772,8 +775,6 @@ function CourtReservations({ auth }) {
         appointmentTypeId: court.appointmentTypeId,
         zonaId: court.id,
         zonaNom: court.nom,
-        authUserId: auth?.userId || null,
-        authPartnerId: auth?.partnerId || null,
         nom: form.nom,
         email: form.email,
         telefon: form.telefon || null,
@@ -877,20 +878,20 @@ function CourtReservations({ auth }) {
         </div>
 
         <div>
-          <div className="alert alert--info" style={{ marginTop: 18 }}>
-            {slot ? (
-              <>
-                Hora seleccionada:{" "}
-                <strong>
-                  {formatSelectedSlot(slot)} · {slot.label}
-                </strong>
-              </>
-            ) : (
-              "Selecciona un dia disponible i una hora."
-            )}
-          </div>
-
           <form className="form" onSubmit={enviar}>
+            <div className="alert alert--info" style={{ marginTop: 0 }}>
+              {slot ? (
+                <>
+                  Hora seleccionada:{" "}
+                  <strong>
+                    {formatSelectedSlot(slot)} · {slot.label}
+                  </strong>
+                </>
+              ) : (
+                "Selecciona un dia disponible i una hora."
+              )}
+            </div>
+
             <div className="row">
               {court.tipus.length > 0 && (
                 <div className="field">
@@ -909,30 +910,29 @@ function CourtReservations({ auth }) {
                   </select>
                 </div>
               )}
+              <div className="field">
+                <label>Hora *</label>
+                <select
+                  value={slot?.start || ""}
+                  onChange={(e) => {
+                    const nextSlot =
+                      slotsDia.find((item) => item.start === e.target.value) || null;
+                    setSlot(nextSlot);
+                    setResultat(null);
+                  }}
+                >
+                  <option value="">Selecciona una hora</option>
+                  {slotsDia.map((item) => (
+                    <option key={item.start} value={item.start}>
+                      {item.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
 
             <div className="field">
-              <label>Hora *</label>
-              <select
-                value={slot?.start || ""}
-                onChange={(e) => {
-                  const nextSlot =
-                    slotsDia.find((item) => item.start === e.target.value) || null;
-                  setSlot(nextSlot);
-                  setResultat(null);
-                }}
-              >
-                <option value="">Selecciona una hora</option>
-                {slotsDia.map((item) => (
-                  <option key={item.start} value={item.start}>
-                    {item.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="field">
-              <label>Jugadors *</label>
+              <label>Jugadors</label>
               <div className="grid" style={{ gap: 12 }}>
                 {form.jugadors.map((player, index) => (
                   <MemberCombobox
@@ -945,9 +945,6 @@ function CourtReservations({ auth }) {
                   />
                 ))}
               </div>
-              <p className="hint" style={{ marginTop: 8 }}>
-                Tu ja comptes com a jugador principal. Els acompanyants són opcionals.
-              </p>
             </div>
 
             <button

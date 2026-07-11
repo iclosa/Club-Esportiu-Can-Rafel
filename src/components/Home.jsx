@@ -93,6 +93,10 @@ export default function Home({ go, auth }) {
                     Socis: {z.preuSoci}
                   </span>
                 </div>
+                <p className="home-zone-contact">
+                  Si vols reservar aquesta zona o tens qualsevol dubte, escriu a{" "}
+                  <a href="mailto:clubcanrafel@gmail.com">clubcanrafel@gmail.com</a>.
+                </p>
               </div>
             ))}
           </div>
