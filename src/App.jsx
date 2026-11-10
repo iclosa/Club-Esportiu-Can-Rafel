@@ -42,12 +42,16 @@ export default function App() {
   useEffect(() => {
     const onPopState = () => {
       setView(getViewFromLocation());
-      window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
     window.addEventListener("popstate", onPopState);
     return () => window.removeEventListener("popstate", onPopState);
   }, []);
+
+  // Cada canvi de pàgina torna a dalt, un cop la nova vista ja s'ha pintat.
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+  }, [view]);
 
   useEffect(() => {
     document.title = (PAGES[view] || PAGES.home).title;
@@ -65,7 +69,6 @@ export default function App() {
     setView(v);
     const nextPath = VIEW_PATHS[v] || "/";
     window.history.pushState({}, "", nextPath);
-    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (

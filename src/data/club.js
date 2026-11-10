@@ -4,7 +4,6 @@
 
 export const CLUB = {
   nom: "Club Esportiu Can Rafel",
-  poblacio: "Cervelló",
   adreca: "Avda. de la Font, s/n — 08758 Cervelló",
   telefon: "936 50 01 45",
   email: "clubcanrafel@gmail.com",

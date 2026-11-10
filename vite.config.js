@@ -23,7 +23,7 @@ function seoPlugin(siteUrl) {
       description: PAGES.home.description,
       email: "clubcanrafel@gmail.com",
       telephone: "+34936500145",
-      address: { "@type": "PostalAddress", streetAddress: "Avda. de la Font, s/n", postalCode: "08758", addressLocality: "Cervelló", addressCountry: "ES" },
+      address: { "@type": "PostalAddress", streetAddress: "Avda. de la Font, s/n", postalCode: "08758", addressCountry: "ES" },
     };
     return [
       START,

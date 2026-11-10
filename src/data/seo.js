@@ -7,18 +7,18 @@ export const OG_IMAGE = { path: "/og-image.jpg", width: 1200, height: 630, alt: 
 export const PAGES = {
   home: {
     path: "/",
-    title: "Club Esportiu Can Rafel · Un club entre pins a Cervelló",
-    description: "Club familiar envoltat de pinedes a Cervelló. Pàdel, piscina, barbacoa i sala polivalent. Fes-te soci i reserva les zones del club en línia.",
+    title: "Club Esportiu Can Rafel · Un club entre pins",
+    description: "Club familiar envoltat de pinedes. Pàdel, piscina, barbacoa i sala polivalent. Fes-te soci i reserva les zones del club en línia.",
   },
   info: {
     path: "/informacio",
     title: "Quotes i beneficis del soci · Club Esportiu Can Rafel",
-    description: "Consulta les quotes, els avantatges i les instal·lacions per als socis del Club Esportiu Can Rafel, a Cervelló.",
+    description: "Consulta les quotes, els avantatges i les instal·lacions per als socis del Club Esportiu Can Rafel.",
   },
   alta: {
     path: "/fes-te-soci",
     title: "Fes-te soci · Club Esportiu Can Rafel",
-    description: "Omple el full d'inscripció en línia i forma part del Club Esportiu Can Rafel, un club familiar entre pins a Cervelló.",
+    description: "Omple el full d'inscripció en línia i forma part del Club Esportiu Can Rafel, un club familiar entre pins.",
   },
   "reserves-zones": {
     path: "/reserves-zones",
@@ -28,6 +28,6 @@ export const PAGES = {
   "reserves-courts": {
     path: "/reserves-pistes",
     title: "Pàdel i frontó · Club Esportiu Can Rafel",
-    description: "Reserva les pistes de pàdel i frontó del Club Esportiu Can Rafel, a Cervelló.",
+    description: "Reserva les pistes de pàdel i frontó del Club Esportiu Can Rafel.",
   },
 };
