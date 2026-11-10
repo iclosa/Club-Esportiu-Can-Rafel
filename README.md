@@ -19,11 +19,18 @@ npm run build    # build de producció (carpeta dist/)
 npm run preview  # previsualitza el build
 ```
 
-## Notes
+## Reserves de producció
 
-- Les reserves depenen de `VITE_RESERVATIONS_API_URL`.
-- El llistat de socis continua sent de prova a `src/data/club.js`.
-- El formulari d'alta encara usa Formspree si `VITE_FORMSPREE_ENDPOINT` està configurat.
+La branca `integration/odoo` conserva la integració anterior. A `production`, les reserves de zones no requereixen login: es consulta Google Calendar, s’escriu el nom del soci responsable i s'envia una sol·licitud per Formspree pendent de confirmació del club.
+
+Cal configurar `VITE_GCAL_API_KEY` i `VITE_FORMSPREE_ENDPOINT`. Les reserves no consulten Odoo ni requereixen Supabase. Sense disponibilitat verificable, no es permet enviar. Les altes de socis també s’envien per Formspree, amb les dades del titular i dels beneficiaris, sense adjunts.
+
+Consulta [configuració i passos pendents de producció](docs/reservas-produccion.md).
+
+```bash
+npm test
+npm run build
+```
 
 ## Personalització ràpida
 

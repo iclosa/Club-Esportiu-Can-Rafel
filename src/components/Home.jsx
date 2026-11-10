@@ -1,6 +1,4 @@
 import { ZONES } from "../data/club.js";
-import Slider from "./Slider.jsx";
-import InstagramFeed from "./InstagramFeed.jsx";
 import PadelFronto from "./PadelFronto.jsx";
 
 export default function Home({ go, auth }) {
@@ -27,14 +25,7 @@ export default function Home({ go, auth }) {
         </div>
       </section>
 
-      {/* Slider destacat amb les imatges del club */}
       <section className="section">
-        <div className="container">
-          <Slider />
-        </div>
-      </section>
-
-      <section className="section section--alt">
         <div className="container">
           <h2 className="section__title">Què és el Club Can Rafel?</h2>
           <p className="section__lead">
@@ -76,7 +67,7 @@ export default function Home({ go, auth }) {
           <h2 className="section__title">Les nostres zones</h2>
           <p className="section__lead">
             Les reserves de les zones del club es fan des d&apos;aquest web amb
-            accés de soci. Els socis reserven de manera
+            el nom del soci responsable i confirmació del club. Els socis reserven de manera
             <strong> gratuïta i amb prioritat</strong>.
           </p>
           <div className="grid grid--2">
@@ -94,8 +85,17 @@ export default function Home({ go, auth }) {
                   </span>
                 </div>
                 <p className="home-zone-contact">
-                  Si vols reservar aquesta zona o tens qualsevol dubte, escriu a{" "}
-                  <a href="mailto:clubcanrafel@gmail.com">clubcanrafel@gmail.com</a>.
+                  Vols reservar aquesta zona?{" "}
+                  <a
+                    href="#reserves-zones"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      go("reserves-zones");
+                    }}
+                  >
+                    Consulta la disponibilitat a la pàgina de reserves
+                  </a>
+                  .
                 </p>
               </div>
             ))}
@@ -111,9 +111,6 @@ export default function Home({ go, auth }) {
           </div>
         </div>
       </section>
-
-      {/* Últimes publicacions d'Instagram */}
-      <InstagramFeed />
 
       {!auth?.loggedIn && (
         <section className="section">

@@ -1,50 +1,31 @@
 import { useState } from "react";
-import { createMembershipOpportunity, fileToBase64 } from "../lib/membership.js";
+import { buildMembershipForm, sendMembershipRequest } from "../lib/membership.js";
+import { FORMSPREE_ENDPOINT } from "../data/club.js";
 
-const IS_TEST_MODE = import.meta.env.DEV;
-const TEST_EMAIL = "isaac.closa+01@gmail.com";
+const IS_LOCAL = import.meta.env.DEV;
+const LOCAL_DEFAULTS = IS_LOCAL ? {
+  titular_nom: "Soci de Prova", titular_naixement: "1988-04-17",
+  titular_dni: "00000000T", titular_adreca: "Carrer de Prova, 12",
+  titular_poblacio: "Cervelló", titular_cp: "08758",
+  titular_mobil: "600000000", titular_fix: "930000000",
+  titular_email: "proves@example.com", banc_titular: "Soci de Prova",
+  banc_dni: "00000000T", banc_entitat: "Banc de Prova",
+  banc_mes: new Date().toISOString().slice(0, 7),
+  banc_iban: "ES0000000000000000000000",
+} : {};
 
-const beneficiariBuit = () => ({
-  nom: IS_TEST_MODE ? "Beneficiari Prova" : "",
-  naixement: IS_TEST_MODE ? "2012-06-15" : "",
-  dni: IS_TEST_MODE ? "00000000T" : "",
-  parentiu: IS_TEST_MODE ? "Fill/a" : "",
-  telefon: IS_TEST_MODE ? "664029696" : "",
-  email: IS_TEST_MODE ? TEST_EMAIL : "",
-  foto: null,
-});
-
-const TEST_MEMBERSHIP_DEFAULTS = {
-  titular_nom: "Isaac Closa",
-  titular_naixement: "1988-04-17",
-  titular_dni: "12345678Z",
-  titular_adreca: "Carrer de Prova, 12",
-  titular_poblacio: "Corbera de Llobregat",
-  titular_cp: "08757",
-  titular_mobil: "664029696",
-  titular_fix: "936500000",
-  titular_email: TEST_EMAIL,
-  banc_titular: "Isaac Closa",
-  banc_dni: "12345678Z",
-  banc_entitat: "CaixaBank",
-  banc_mes: "2026-07",
-  banc_iban: "ES1200000000000000000000",
+const beneficiariBuit = () => IS_LOCAL ? {
+  nom: "Beneficiari de Prova", naixement: "2012-06-15", dni: "00000000T",
+  parentiu: "Fill/a", telefon: "600000001", email: "beneficiari@example.com",
+} : {
+  nom: "", naixement: "", dni: "", parentiu: "", telefon: "", email: "",
 };
 
-function buildTestAttachment(name, content, mimetype) {
-  return {
-    name,
-    mimetype,
-    data: btoa(unescape(encodeURIComponent(content))),
-  };
-}
-
 export default function RegisterForm({ go }) {
-  const [beneficiaris, setBeneficiaris] = useState([beneficiariBuit()]);
+  const [beneficiaris, setBeneficiaris] = useState(() => [beneficiariBuit()]);
   const [enviat, setEnviat] = useState(false);
   const [enviant, setEnviant] = useState(false);
   const [error, setError] = useState("");
-
   const addBeneficiari = () => {
     if (beneficiaris.length < 4) {
       setBeneficiaris([...beneficiaris, beneficiariBuit()]);
@@ -72,97 +53,17 @@ export default function RegisterForm({ go }) {
     }
 
     const fd = new FormData(formEl);
-    const benePlens = beneficiaris.filter((b) => b.nom.trim());
-    const titularDniFile = fd.get("titular_dni_file");
-
-    if (
-      !IS_TEST_MODE &&
-      (!(titularDniFile instanceof File) || !titularDniFile.size)
-    ) {
-      setError("Cal adjuntar la fotocòpia del DNI del titular.");
-      return;
-    }
-
-    for (const [index, bene] of benePlens.entries()) {
-      if (!IS_TEST_MODE && (!(bene.foto instanceof File) || !bene.foto.size)) {
-        setError(`Cal adjuntar la foto del beneficiari ${index + 1}.`);
-        return;
-      }
-    }
-
     setEnviant(true);
     setError("");
-
     try {
-      const titularAttachment =
-        titularDniFile instanceof File && titularDniFile.size
-          ? {
-              name: titularDniFile.name,
-              mimetype: titularDniFile.type || "application/octet-stream",
-              data: await fileToBase64(titularDniFile),
-            }
-          : buildTestAttachment(
-              "dni-titular-test.txt",
-              "Adjunt de prova per a entorn de desenvolupament.",
-              "text/plain"
-            );
-
-      const attachments = [titularAttachment];
-
-      const beneficiarisPayload = await Promise.all(
-        benePlens.map(async (b) => ({
-          nom: b.nom,
-          naixement: b.naixement,
-          dni: b.dni,
-          parentiu: b.parentiu,
-          telefon: b.telefon,
-          email: b.email,
-          foto:
-            b.foto instanceof File && b.foto.size
-              ? {
-                  name: b.foto.name,
-                  mimetype: b.foto.type || "application/octet-stream",
-                  data: await fileToBase64(b.foto),
-                }
-              : IS_TEST_MODE
-                ? buildTestAttachment(
-                    `beneficiari-${b.nom || "test"}.txt`,
-                    `Foto de prova del beneficiari ${b.nom || "sense nom"}.`,
-                    "text/plain"
-                  )
-              : null,
-        }))
-      );
-
-      await createMembershipOpportunity({
-        titular_nom: String(fd.get("titular_nom") || ""),
-        titular_naixement: String(fd.get("titular_naixement") || ""),
-        titular_dni: String(fd.get("titular_dni") || ""),
-        titular_adreca: String(fd.get("titular_adreca") || ""),
-        titular_poblacio: String(fd.get("titular_poblacio") || ""),
-        titular_cp: String(fd.get("titular_cp") || ""),
-        titular_mobil: String(fd.get("titular_mobil") || ""),
-        titular_fix: String(fd.get("titular_fix") || ""),
-        titular_email: String(fd.get("titular_email") || ""),
-        banc_titular: String(fd.get("banc_titular") || ""),
-        banc_dni: String(fd.get("banc_dni") || ""),
-        banc_entitat: String(fd.get("banc_entitat") || ""),
-        banc_mes: String(fd.get("banc_mes") || ""),
-        banc_iban: String(fd.get("banc_iban") || ""),
-        auth_imatge: Boolean(fd.get("auth_imatge")),
-        auth_dades: Boolean(fd.get("auth_dades")),
-        auth_veracitat: Boolean(fd.get("auth_veracitat")),
-        beneficiaris: beneficiarisPayload,
-        attachments,
-      });
-
+      await sendMembershipRequest(FORMSPREE_ENDPOINT, buildMembershipForm(fd, beneficiaris));
       setEnviat(true);
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (err) {
       setError(
         err instanceof Error && err.message
           ? err.message
-          : "No s'ha pogut crear l'oportunitat al CRM."
+          : "No s'ha pogut enviar la sol·licitud d’alta."
       );
     } finally {
       setEnviant(false);
@@ -212,15 +113,15 @@ export default function RegisterForm({ go }) {
           </p>
         )}
 
-        <form className="form" onSubmit={onSubmit}>
+        {IS_LOCAL && <p className="alert alert--info">Mode local: dades fictícies de prova. Si envies el formulari, s’enviarà al Formspree configurat.</p>}
+        <form className="form" encType="multipart/form-data" onSubmit={onSubmit}>
           <fieldset className="fieldset">
             <legend>Dades del soci titular</legend>
             <div className="field">
               <label>Nom i cognoms *</label>
               <input
                 required
-                name="titular_nom"
-                defaultValue={IS_TEST_MODE ? TEST_MEMBERSHIP_DEFAULTS.titular_nom : ""}
+                name="titular_nom" defaultValue={LOCAL_DEFAULTS.titular_nom || ""}
               />
             </div>
             <div className="row">
@@ -229,32 +130,23 @@ export default function RegisterForm({ go }) {
                 <input
                   required
                   type="date"
-                  name="titular_naixement"
-                  defaultValue={
-                    IS_TEST_MODE ? TEST_MEMBERSHIP_DEFAULTS.titular_naixement : ""
-                  }
+                  name="titular_naixement" defaultValue={LOCAL_DEFAULTS.titular_naixement || ""}
                 />
               </div>
               <div className="field">
                 <label>DNI *</label>
                 <input
                   required
-                  name="titular_dni"
+                  name="titular_dni" defaultValue={LOCAL_DEFAULTS.titular_dni || ""}
                   placeholder="12345678A"
-                  defaultValue={IS_TEST_MODE ? TEST_MEMBERSHIP_DEFAULTS.titular_dni : ""}
                 />
               </div>
-            </div>
-            <div className="field">
-              <label>Fotocòpia del DNI del titular *</label>
-              <input required type="file" name="titular_dni_file" accept=".pdf,image/*" />
             </div>
             <div className="field">
               <label>Adreça *</label>
               <input
                 required
-                name="titular_adreca"
-                defaultValue={IS_TEST_MODE ? TEST_MEMBERSHIP_DEFAULTS.titular_adreca : ""}
+                name="titular_adreca" defaultValue={LOCAL_DEFAULTS.titular_adreca || ""}
               />
             </div>
             <div className="row">
@@ -262,19 +154,15 @@ export default function RegisterForm({ go }) {
                 <label>Població *</label>
                 <input
                   required
-                  name="titular_poblacio"
-                  defaultValue={
-                    IS_TEST_MODE ? TEST_MEMBERSHIP_DEFAULTS.titular_poblacio : ""
-                  }
+                  name="titular_poblacio" defaultValue={LOCAL_DEFAULTS.titular_poblacio || ""}
                 />
               </div>
               <div className="field">
                 <label>Codi postal *</label>
                 <input
                   required
-                  name="titular_cp"
+                  name="titular_cp" defaultValue={LOCAL_DEFAULTS.titular_cp || ""}
                   inputMode="numeric"
-                  defaultValue={IS_TEST_MODE ? TEST_MEMBERSHIP_DEFAULTS.titular_cp : ""}
                 />
               </div>
             </div>
@@ -284,18 +172,14 @@ export default function RegisterForm({ go }) {
                 <input
                   required
                   type="tel"
-                  name="titular_mobil"
-                  defaultValue={
-                    IS_TEST_MODE ? TEST_MEMBERSHIP_DEFAULTS.titular_mobil : ""
-                  }
+                  name="titular_mobil" defaultValue={LOCAL_DEFAULTS.titular_mobil || ""}
                 />
               </div>
               <div className="field">
                 <label>Telèfon fix</label>
                 <input
                   type="tel"
-                  name="titular_fix"
-                  defaultValue={IS_TEST_MODE ? TEST_MEMBERSHIP_DEFAULTS.titular_fix : ""}
+                  name="titular_fix" defaultValue={LOCAL_DEFAULTS.titular_fix || ""}
                 />
               </div>
             </div>
@@ -304,8 +188,7 @@ export default function RegisterForm({ go }) {
               <input
                 required
                 type="email"
-                name="titular_email"
-                defaultValue={IS_TEST_MODE ? TEST_MEMBERSHIP_DEFAULTS.titular_email : ""}
+                name="titular_email" defaultValue={LOCAL_DEFAULTS.titular_email || ""}
               />
             </div>
           </fieldset>
@@ -393,16 +276,6 @@ export default function RegisterForm({ go }) {
                     />
                   </div>
                 </div>
-                <div className="field">
-                  <label>Foto del beneficiari {b.nom.trim() ? "*" : "(opcional fins que omplis el nom)"}</label>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) =>
-                      updateBeneficiari(i, "foto", e.target.files?.[0] || null)
-                    }
-                  />
-                </div>
               </div>
             ))}
             {beneficiaris.length < 4 && (
@@ -422,15 +295,13 @@ export default function RegisterForm({ go }) {
               <div className="field">
                 <label>Titular del compte</label>
                 <input
-                  name="banc_titular"
-                  defaultValue={IS_TEST_MODE ? TEST_MEMBERSHIP_DEFAULTS.banc_titular : ""}
+                  name="banc_titular" defaultValue={LOCAL_DEFAULTS.banc_titular || ""}
                 />
               </div>
               <div className="field">
                 <label>DNI / NIF del titular</label>
                 <input
-                  name="banc_dni"
-                  defaultValue={IS_TEST_MODE ? TEST_MEMBERSHIP_DEFAULTS.banc_dni : ""}
+                  name="banc_dni" defaultValue={LOCAL_DEFAULTS.banc_dni || ""}
                 />
               </div>
             </div>
@@ -438,25 +309,22 @@ export default function RegisterForm({ go }) {
               <div className="field">
                 <label>Entitat bancària</label>
                 <input
-                  name="banc_entitat"
-                  defaultValue={IS_TEST_MODE ? TEST_MEMBERSHIP_DEFAULTS.banc_entitat : ""}
+                  name="banc_entitat" defaultValue={LOCAL_DEFAULTS.banc_entitat || ""}
                 />
               </div>
               <div className="field">
                 <label>Mes d&apos;inici del cobrament</label>
                 <input
-                  name="banc_mes"
+                  name="banc_mes" defaultValue={LOCAL_DEFAULTS.banc_mes || ""}
                   type="month"
-                  defaultValue={IS_TEST_MODE ? TEST_MEMBERSHIP_DEFAULTS.banc_mes : ""}
                 />
               </div>
             </div>
             <div className="field">
               <label>IBAN</label>
               <input
-                name="banc_iban"
+                name="banc_iban" defaultValue={LOCAL_DEFAULTS.banc_iban || ""}
                 placeholder="ES00 0000 0000 00 0000000000"
-                defaultValue={IS_TEST_MODE ? TEST_MEMBERSHIP_DEFAULTS.banc_iban : ""}
               />
             </div>
             <p className="hint">
@@ -468,7 +336,7 @@ export default function RegisterForm({ go }) {
           <fieldset className="fieldset">
             <legend>Autoritzacions (RGPD)</legend>
             <label className="check">
-              <input type="checkbox" name="auth_imatge" defaultChecked={IS_TEST_MODE} />
+              <input type="checkbox" name="auth_imatge" defaultChecked={IS_LOCAL} />
               <span>
                 Autoritzo l&apos;ús de la meva imatge i la dels beneficiaris en
                 fotografies del club, per publicar-les al web i/o xarxes socials
@@ -479,8 +347,8 @@ export default function RegisterForm({ go }) {
               <input
                 type="checkbox"
                 required
-                name="auth_dades"
-                defaultChecked={IS_TEST_MODE}
+                name="auth_dades" defaultChecked={IS_LOCAL}
+
               />
               <span>
                 Autoritzo que les meves dades i la dels beneficiaris s&apos;incloguin
@@ -492,8 +360,8 @@ export default function RegisterForm({ go }) {
               <input
                 type="checkbox"
                 required
-                name="auth_veracitat"
-                defaultChecked={IS_TEST_MODE}
+                name="auth_veracitat" defaultChecked={IS_LOCAL}
+
               />
               <span>
                 Confirmo que les dades facilitades són certes i accepto les

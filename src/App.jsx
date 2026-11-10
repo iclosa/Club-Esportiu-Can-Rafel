@@ -4,24 +4,14 @@ import Home from "./components/Home.jsx";
 import InfoSocis from "./components/InfoSocis.jsx";
 import RegisterForm from "./components/RegisterForm.jsx";
 import Reservations from "./components/Reservations.jsx";
-import ReservationConfirmation from "./components/ReservationConfirmation.jsx";
-import ReservationCancelled from "./components/ReservationCancelled.jsx";
 import Footer from "./components/Footer.jsx";
-import {
-  clearAuthSession,
-  loginWithOdoo,
-  readStoredAuth,
-  storeAuthSession,
-} from "./lib/auth.js";
-
+import { PAGES } from "./data/seo.js";
 const VIEW_PATHS = {
   home: "/",
   info: "/informacio",
   alta: "/fes-te-soci",
   "reserves-zones": "/reserves-zones",
   "reserves-courts": "/reserves-pistes",
-  "reservation-confirmed": "/reserva-confirmada",
-  "reservation-cancelled": "/reserva-cancelada",
 };
 
 function normalisePathname(pathname) {
@@ -40,19 +30,14 @@ function getViewFromLocation() {
   if (pathname === "/reserves-pistes" || pathname === "/reserves-courts") {
     return "reserves-courts";
   }
-  if (pathname === "/reserva-confirmada") return "reservation-confirmed";
-  if (pathname === "/reserva-cancelada") return "reservation-cancelled";
+  if (pathname === "/reserva-confirmada") return "reserves-zones";
+  if (pathname === "/reserva-cancelada") return "reserves-zones";
 
   return "home";
 }
 
 export default function App() {
   const [view, setView] = useState(() => getViewFromLocation());
-  const [auth, setAuth] = useState(null);
-
-  useEffect(() => {
-    setAuth(readStoredAuth());
-  }, []);
 
   useEffect(() => {
     const onPopState = () => {
@@ -63,6 +48,10 @@ export default function App() {
     window.addEventListener("popstate", onPopState);
     return () => window.removeEventListener("popstate", onPopState);
   }, []);
+
+  useEffect(() => {
+    document.title = (PAGES[view] || PAGES.home).title;
+  }, [view]);
 
   useEffect(() => {
     const nextPath = VIEW_PATHS[view] || "/";
@@ -79,39 +68,21 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const handleLogin = async (credentials) => {
-    const session = await loginWithOdoo(credentials);
-    setAuth(session);
-    storeAuthSession(session);
-    return session;
-  };
-
-  const handleLogout = () => {
-    setAuth(null);
-    clearAuthSession();
-    if (view === "reserves-zones" || view === "reserves-courts") {
-      setView("home");
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-  };
-
   return (
     <>
-      <Navbar view={view} go={go} auth={auth} onLogout={handleLogout} />
+      <Navbar view={view} go={go} />
       <main>
-        {view === "home" && <Home go={go} auth={auth} />}
-        {view === "info" && <InfoSocis go={go} auth={auth} />}
+        {view === "home" && <Home go={go} />}
+        {view === "info" && <InfoSocis go={go} />}
         {view === "alta" && <RegisterForm go={go} />}
         {view === "reserves-zones" && (
-          <Reservations auth={auth} onLogin={handleLogin} section="zones" />
+          <Reservations section="zones" />
         )}
         {view === "reserves-courts" && (
-          <Reservations auth={auth} onLogin={handleLogin} section="courts" />
+          <Reservations section="courts" />
         )}
-        {view === "reservation-confirmed" && <ReservationConfirmation go={go} />}
-        {view === "reservation-cancelled" && <ReservationCancelled go={go} />}
       </main>
-      <Footer go={go} auth={auth} />
+      <Footer go={go} />
     </>
   );
 }

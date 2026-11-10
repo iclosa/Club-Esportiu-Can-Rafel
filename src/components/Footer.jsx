@@ -35,10 +35,6 @@ export default function Footer({ go, auth }) {
             <a href="#" onClick={(e) => { e.preventDefault(); go("reserves-zones"); }}>
               Reserva una zona
             </a>
-            <br />
-            <a href={`https://${CLUB.web}`} target="_blank" rel="noreferrer">
-              {CLUB.web}
-            </a>
           </p>
         </div>
       </div>
